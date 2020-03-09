@@ -25,6 +25,7 @@ namespace VeeamSeleniumWebDriver
         {
             var driver = _webDriver[webDriverType];
             driver.Navigate().GoToUrl(URL_TO_TEST);
+            driver.Manage().Window.Maximize();
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(WAIT_ELEMENT_TIMEOUT));
             var selectedCountry = wait.Until(ExpectedConditions.ElementExists(By.CssSelector("#country-element > div.selecter > span.selecter-selected")));
 
@@ -38,6 +39,8 @@ namespace VeeamSeleniumWebDriver
 
             var selectedLanguage = driver.FindElement(By.CssSelector("#language > span.selecter-selected"));
             selectedLanguage.Click();
+            driver.WaitForAjax();
+            
             var languageSelector = driver.FindElement(By.CssSelector("#language"));
             var languages = languageSelector.FindElements(By.CssSelector("label.controls-checkbox"));
             foreach (var l in languages)
@@ -49,6 +52,7 @@ namespace VeeamSeleniumWebDriver
                 }
             }
             languageSelector.FindElement(By.CssSelector("a.selecter-fieldset-submit")).Click();
+            driver.WaitForAjax();
 
             if (driver.TryFindElement(By.CssSelector("a.load-more-button"), out var loadMoreButton) && loadMoreButton.Displayed)
             { 
